@@ -4,7 +4,7 @@ dotenv.config({ path: './.env.example' });
 
 const connectDB = async () => {
   try {
-  mongoose.connect("mongodb+srv://kyaarlis:3eoo5vyJ4hQNtGQ4@securotrade.jtg5a0d.mongodb.net/test", {
+  mongoose.connect("mongodbURI", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
