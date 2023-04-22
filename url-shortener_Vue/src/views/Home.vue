@@ -4,12 +4,28 @@ import { ref } from 'vue';
 document.title = "URL Shortener"
 
 const longUrl = ref('')
+const shortUrl = ref('')
 const isSubmitted = ref(false)
 
 const onSubmit = () => {
   isSubmitted.value = true
-  console.log(`LongUrl: ${longUrl.value}`)
+  console.log(`"origUrl": ${longUrl.value}`)
+  fetch('http://localhost:3333/api/short', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    "origUrl": longUrl.value
+})
+})
+.then(response => response.json())
+.then(data => shortUrl.value = data.shortUrl)
+// console.log(`Short URL: ${data.shortUrl}`)
+// shortUrl.value = data.shortUrl
+.catch(error => console.error(error));
 }
+
 </script>
 
 <template>
@@ -19,8 +35,8 @@ const onSubmit = () => {
       <input id="long-url" type="text" v-model="longUrl" required @click="longUrl = ''">
       <button type="submit">Shorten</button>
     </form>
-    <h2 class="urlh2">Long URL:</h2>
-    <h2 class="urlh2" v-if="isSubmitted">{{ longUrl }}</h2>
+    <h2 class="urlh2">Short URL:</h2>
+    <h2 class="urlh2" v-if="isSubmitted">{{ shortUrl }}</h2>
   </div>
 </template>
 
@@ -29,32 +45,3 @@ const onSubmit = () => {
   display: inline;
 }
 </style> 
-
-<!-- <template>
-  <div>
-    <form @submit.prevent="onSubmit">
-      <label for="long-url">Long URL:</label>
-      <input id="long-url" type="text" v-model="longUrl" required @click="clearLongUrl">
-      <button type="submit">Shorten</button>
-    </form>
-    <h1 v-if="isSubmitted">Long URL:</h1>
-    <h2 v-if="isSubmitted"> {{ longUrl }}</h2>
-  </div>
-</template>
-<script setup lang="ts">
-import { ref } from 'vue';
-
-document.title = "URL Shortener"
-
-const longUrl = ref('')
-const isSubmitted = ref(false)
-
-const onSubmit = () => {
-  console.log(`LongUrl: ${longUrl.value}`)
-  isSubmitted.value = true
-}
-
-const clearLongUrl = () => {
-  longUrl.value = '';
-}
-</script> --> -->
