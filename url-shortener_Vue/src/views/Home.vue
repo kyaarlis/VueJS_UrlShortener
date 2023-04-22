@@ -26,6 +26,16 @@ const onSubmit = () => {
 .catch(error => console.error(error));
 }
 
+
+const copyShortUrlToClipboard = () => {
+  const el = document.createElement('textarea')
+  el.value = shortUrl.value
+  document.body.appendChild(el)
+  el.select()
+  document.execCommand('copy')
+  document.body.removeChild(el)
+}
+
 </script>
 
 <template>
@@ -36,7 +46,8 @@ const onSubmit = () => {
       <button type="submit">Shorten</button>
     </form>
     <h2 class="urlh2">Short URL:</h2>
-    <h2 class="urlh2" v-if="isSubmitted">{{ shortUrl }}</h2>
+    <h2 class="urlh2" v-if="isSubmitted"><a v-bind="{ href: shortUrl, target: '_blank' }">{{ shortUrl }}</a></h2>
+    <button @click="copyShortUrlToClipboard">Copy Link</button>
   </div>
 </template>
 
@@ -45,3 +56,10 @@ const onSubmit = () => {
   display: inline;
 }
 </style> 
+
+
+<style scoped>
+body {
+  background-color: red
+}
+</style>
