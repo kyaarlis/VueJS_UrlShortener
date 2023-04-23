@@ -36,17 +36,19 @@ const copyShortUrlToClipboard = () => {
 
 <template>
       <div class="flex justify-center items-center w-full h-screen">
-        <div class="grid-rows-2 grid-cols-2 border-4 rounded w-2/4 h-2/4 bg-white border-indigo-600 p-4">
-        <form class="mb-4" @submit.prevent="onSubmit">
-          <div class="flex justify-center items-start p-2">
-          <label class="mr-2" for="long-url">Long URL:</label>
-          <input class="border-2 rounded w-3/4 mr-2 mb-4" id="long-url" type="text" v-model="longUrl" required @click="longUrl = ''">
-        </div>
-          <button class="bg-blue-400 border-4 rounded p-2 block ml-16 w-2/4" type="submit">Shorten</button>
+        <div class="border-4 rounded w-2/4 h-2/4 bg-white border-indigo-600 p-4 max-h-full overflow-auto">
+        <form class="grid grid-rows-2 grid-cols-6 mb-4" @submit.prevent="onSubmit">
+          
+          <label class="" for="long-url">Long URL:</label>
+          <input class="border-2 rounded mr-2 mb-4  row-span-1 col-start-2 col-end-7" id="long-url" type="text" v-model="longUrl" required @click="longUrl = ''">
+       
+          <button class="bg-indigo-600 text-white rounded p-2 row-span-1 col-start-2 col-end-6" type="submit">Shorten</button>
         </form>
-        <h2 class="urlh2">Short URL:</h2>
-        <h2 class="mb-4" v-if="isSubmitted"><a v-bind="{ href: shortUrl, target: '_blank' }">{{ shortUrl }}</a></h2>
-        <button class="bg-red-400 border-4 rounded p-2" @click="copyShortUrlToClipboard">Copy Link</button>
+        <div class="grid grid-cols-7" v-if="isSubmitted">
+        <label class="">Short URL:</label>
+        <input class="col-start-3 col-end-7 border-2 rounded p-2" v-bind="{ href: shortUrl, target: '_blank' }" v-model="shortUrl">
+        <button class="bg-red-600 text-white rounded p-1 mt-2 col-start-3 col-end-7" @click="copyShortUrlToClipboard">Copy Link</button>
+        </div>
       </div>
     </div>
 </template>
