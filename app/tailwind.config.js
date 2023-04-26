@@ -8,7 +8,7 @@ export default {
     extend: {
       backgroundImage: {
         'bg-img': "url('/src/assets/wave-haikei.svg')",
-        'bg-img1': "url('/src/assets/blob-scene-haikei.svg')",
+        'bg-img1': "url('/src/assets/layered-steps-haikei (1).svg')",
         'bg-form': "url('/src/assets/form-blob.svg')"
       },
     },

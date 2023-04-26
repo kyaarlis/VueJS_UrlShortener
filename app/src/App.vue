@@ -35,21 +35,26 @@ const copyShortUrlToClipboard = () => {
 </script>
 
 <template>
-      <div class="flex justify-center items-center w-full h-screen">
-        <div class="border-4 rounded w-2/4 h-2/4 bg-white border-indigo-600 p-4 max-h-full overflow-auto">
-        <form class="grid grid-rows-2 grid-cols-6 mb-4" @submit.prevent="onSubmit">
-          
-          <label class="" for="long-url">Long URL:</label>
-          <input class="border-2 rounded mr-2 mb-4  row-span-1 col-start-2 col-end-7" id="long-url" type="text" v-model="longUrl" required @click="longUrl = ''">
-       
-          <button class="bg-indigo-600 text-white rounded p-2 row-span-1 col-start-2 col-end-6" type="submit">Shorten</button>
+      <div class="flex justify-center items-center w-full h-screen" style="background-image: url('/src/assets/layered-steps-haikei (1).svg'); background-repeat: no-repeat; background-size: cover;">
+        <div class="flex justify-start items-center flex-col  w-2/4 h-2/4 max-h-full overflow-auto">
+        
+        <form class="row g-3" @submit.prevent="onSubmit">
+          <div class="col-auto">
+            <input type="text" class="form-control" id="inputPassword2" placeholder="Long URL" v-model="longUrl" required @click="longUrl = ''">
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="bg-indigo-600 text-white rounded p-2 mb-3">Shorten!</button>
+          </div>
         </form>
-        <div class="grid grid-cols-7" v-if="isSubmitted">
-        <label class="">Short URL:</label>
-        <input class="col-start-3 col-end-7 border-2 rounded p-2" v-bind="{ href: shortUrl, target: '_blank' }" v-model="shortUrl">
-        <button class="bg-red-600 text-white rounded p-1 mt-2 col-start-3 col-end-7" @click="copyShortUrlToClipboard">Copy Link</button>
+        <div class="flex justify-center items-center" v-if="isSubmitted">
+        <div class="alert alert-info" role="alert">
+          Short Url: 
+          <a v-bind="{ href: shortUrl, target: '_blank' }">{{ shortUrl }}</a>
+          <button class="bg-blue-900 text-white rounded p-1 mt-2 col-start-3 col-end-7 ml-3" @click="copyShortUrlToClipboard">Copy Link</button>
+        </div> 
         </div>
       </div>
+       
     </div>
 </template>
 
