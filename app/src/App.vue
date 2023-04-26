@@ -1,13 +1,16 @@
 <script setup lang="ts"> 
 import { ref } from 'vue';
+import Toast from './components/Toast.vue'
 
 document.title = "URL Shortener"
 
 const longUrl = ref('')
 const shortUrl = ref('')
+// Keeps track wether the URL submit button is clicked or not
 const isSubmitted = ref(false)
 const isCopied = ref(false)
 
+// Sends the url to backend for modifications and to store in DB
 const onSubmit = () => {
   isSubmitted.value = true
   console.log(`"origUrl": ${longUrl.value}`)
@@ -25,6 +28,7 @@ const onSubmit = () => {
 .catch(error => console.error(error));
 }
 
+// Copies the shortened URL to clipboard
 const copyShortUrlToClipboard = () => {
   const el = document.createElement('textarea')
   el.value = shortUrl.value
@@ -32,13 +36,15 @@ const copyShortUrlToClipboard = () => {
   el.select()
   document.execCommand('copy')
   document.body.removeChild(el)
+  // If link is copied then create toast
   createToast()
-
   isCopied.value = true
 }
 
+// Toasts array
 const toasts = ref([]);
 
+// Deletes all toasts from array
 const clearAllToasts = () => {
   toasts.value = []
 }
@@ -48,12 +54,14 @@ const createToast = () => {
     title: 'Success',
     content: 'Url copied to clipboard!'
   });
+  // Deletes toast after 5 seconds
   setTimeout(function(){
     clearAllToasts();
     isCopied.value = false
   }, 5000);
 }
 
+// Removes only one toast
 const removeToast = (index) => {
       toasts.value.splice(index, 1);
       isCopied.value = false
@@ -65,6 +73,7 @@ const removeToast = (index) => {
      <div class="flex justify-center items-center flex-col w-full h-screen" style="background-image: url('/src/assets/layered-steps-haikei (1).svg'); background-repeat: no-repeat; background-size: cover;">
     <div class="flex justify-start items-center flex-col  w-2/4 h-2/4 max-h-full overflow-auto">
 
+      <!-- Form --> 
       <form class="row g-3" @submit.prevent="onSubmit">
         <div class="col-auto">
           <input type="text" class="form-control" id="inputPassword2" placeholder="Long URL" v-model="longUrl" required @click="longUrl = ''">
@@ -74,6 +83,7 @@ const removeToast = (index) => {
         </div>
       </form>
 
+       <!-- Box, where the shortened URl result appears --> 
       <div class="flex justify-center items-center" v-if="isSubmitted">
         <div class="alert alert-primary" role="alert">
           Short Url: 
@@ -82,7 +92,9 @@ const removeToast = (index) => {
         </div> 
       </div>
     </div>
-    <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5" placement="bottom-end" v-if="isCopied">
+
+     <!-- Toast --> 
+     <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5" placement="bottom-end" v-if="isCopied">
     <CToast class="flex flex-col" v-for="(toast, index) in toasts">
       <div class="flex justify-between">
       <CToastHeader>
@@ -95,6 +107,7 @@ const removeToast = (index) => {
       </CToastBody>  
     </CToast>
   </CToaster>
+    
   </div>
 </template>
 
