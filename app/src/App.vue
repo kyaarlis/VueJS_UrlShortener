@@ -1,6 +1,5 @@
 <script setup lang="ts"> 
 import { ref } from 'vue';
-import $ from 'jquery'
 
 document.title = "URL Shortener"
 
@@ -40,21 +39,25 @@ const copyShortUrlToClipboard = () => {
 
 const toasts = ref([]);
 
+const clearAllToasts = () => {
+  toasts.value = []
+}
+
 const createToast = () => {
   toasts.value.push({
     title: 'Success',
     content: 'Url copied to clipboard!'
   });
+  setTimeout(function(){
+    clearAllToasts();
+    isCopied.value = false
+  }, 5000);
 }
 
 const removeToast = (index) => {
       toasts.value.splice(index, 1);
       isCopied.value = false
     };
-
-const clearAllToasts = () => {
-  toasts.value = []
-}
 </script>
 
 
@@ -79,7 +82,7 @@ const clearAllToasts = () => {
         </div> 
       </div>
     </div>
-    <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5" placement="bottom-end" v-if="isCopied" visible>
+    <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5" placement="bottom-end" v-if="isCopied">
     <CToast class="flex flex-col" v-for="(toast, index) in toasts">
       <div class="flex justify-between">
       <CToastHeader>
