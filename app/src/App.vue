@@ -1,11 +1,13 @@
 <script setup lang="ts"> 
 import { ref } from 'vue';
+import $ from 'jquery'
 
 document.title = "URL Shortener"
 
 const longUrl = ref('')
 const shortUrl = ref('')
 const isSubmitted = ref(false)
+const isCopied = ref(false)
 
 const onSubmit = () => {
   isSubmitted.value = true
@@ -31,30 +33,65 @@ const copyShortUrlToClipboard = () => {
   el.select()
   document.execCommand('copy')
   document.body.removeChild(el)
+  createToast()
+
+  isCopied.value = true
+}
+
+const toasts = ref([]);
+
+const createToast = () => {
+  toasts.value.push({
+    title: 'Success',
+    content: 'Url copied to clipboard!'
+  });
+}
+
+const removeToast = (index) => {
+      toasts.value.splice(index, 1);
+      isCopied.value = false
+    };
+
+const clearAllToasts = () => {
+  toasts.value = []
 }
 </script>
 
+
 <template>
-      <div class="flex justify-center items-center w-full h-screen" style="background-image: url('/src/assets/layered-steps-haikei (1).svg'); background-repeat: no-repeat; background-size: cover;">
-        <div class="flex justify-start items-center flex-col  w-2/4 h-2/4 max-h-full overflow-auto">
-        
-        <form class="row g-3" @submit.prevent="onSubmit">
-          <div class="col-auto">
-            <input type="text" class="form-control" id="inputPassword2" placeholder="Long URL" v-model="longUrl" required @click="longUrl = ''">
-          </div>
-          <div class="col-auto">
-            <button type="submit" class="bg-indigo-600 text-white rounded p-2 mb-3">Shorten!</button>
-          </div>
-        </form>
-        <div class="flex justify-center items-center" v-if="isSubmitted">
-        <div class="alert alert-info" role="alert">
+     <div class="flex justify-center items-center flex-col w-full h-screen" style="background-image: url('/src/assets/layered-steps-haikei (1).svg'); background-repeat: no-repeat; background-size: cover;">
+    <div class="flex justify-start items-center flex-col  w-2/4 h-2/4 max-h-full overflow-auto">
+
+      <form class="row g-3" @submit.prevent="onSubmit">
+        <div class="col-auto">
+          <input type="text" class="form-control" id="inputPassword2" placeholder="Long URL" v-model="longUrl" required @click="longUrl = ''">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="bg-indigo-600 text-white rounded p-2 mb-3" @click="clearAllToasts()">Shorten!</button>
+        </div>
+      </form>
+
+      <div class="flex justify-center items-center" v-if="isSubmitted">
+        <div class="alert alert-primary" role="alert">
           Short Url: 
           <a v-bind="{ href: shortUrl, target: '_blank' }">{{ shortUrl }}</a>
-          <button class="bg-blue-900 text-white rounded p-1 mt-2 col-start-3 col-end-7 ml-3" @click="copyShortUrlToClipboard">Copy Link</button>
+          <button class="bg-blue-900 text-white rounded p-1 mt-2 col-start-3 col-end-7 ml-3" id="liveToastBtn" @click="copyShortUrlToClipboard">Copy Link</button>
         </div> 
-        </div>
       </div>
-       
     </div>
+    <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5" placement="bottom-end" v-if="isCopied" visible>
+    <CToast class="flex flex-col" v-for="(toast, index) in toasts">
+      <div class="flex justify-between">
+      <CToastHeader>
+      <span class="me-auto fw-bold text-white inline">{{toast.title}}</span>
+      </CToastHeader>
+      <button type="button" class="btn btn-close bg-white" aria-label="Close" @click="removeToast(index)"></button>
+    </div>
+      <CToastBody class="me-auto text-white block">
+        {{ toast.content }}
+      </CToastBody>  
+    </CToast>
+  </CToaster>
+  </div>
 </template>
 

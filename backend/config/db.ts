@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config({ path: './.env.example' });
 
 const connectDB = async () => {
   try {
-  mongoose.connect("mongodb+et/test", {
+  mongoose.connect("mongo", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
