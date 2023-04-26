@@ -13,7 +13,7 @@ const isCopied = ref(false)
 // Sends the url to backend for modifications and to store in DB
 const onSubmit = () => {
   isSubmitted.value = true
-  console.log(`"origUrl": ${longUrl.value}`)
+
   fetch('http://localhost:3333/api/short', {
   method: 'POST',
   headers: {
@@ -71,15 +71,16 @@ const removeToast = (index) => {
 
 <template>
      <div class="flex justify-center items-center flex-col w-full h-screen" style="background-image: url('/src/assets/layered-steps-haikei (1).svg'); background-repeat: no-repeat; background-size: cover;">
-    <div class="flex justify-start items-center flex-col  w-2/4 h-2/4 max-h-full overflow-auto">
+      <h1 class="text-white mb-8 -mt-8">Long URL Shortener</h1> 
+      <div class="flex justify-start items-center flex-col  w-2/4 h-3/4 max-h-full overflow-auto">
 
       <!-- Form --> 
-      <form class="row g-3" @submit.prevent="onSubmit">
+      <form class="row g-3 mt-1" @submit.prevent="onSubmit">
         <div class="col-auto">
           <input type="text" class="form-control" id="inputPassword2" placeholder="Long URL" v-model="longUrl" required @click="longUrl = ''">
         </div>
         <div class="col-auto">
-          <button type="submit" class="bg-indigo-600 text-white rounded p-2 mb-3" @click="clearAllToasts()">Shorten!</button>
+          <button type="submit" class="bg-indigo-600 text-white rounded p-2 mb-3 hover:bg-indigo-700 focus:ring" @click="clearAllToasts()">Shorten!</button>
         </div>
       </form>
 
@@ -88,7 +89,7 @@ const removeToast = (index) => {
         <div class="alert alert-primary" role="alert">
           Short Url: 
           <a v-bind="{ href: shortUrl, target: '_blank' }">{{ shortUrl }}</a>
-          <button class="bg-blue-900 text-white rounded p-1 mt-2 col-start-3 col-end-7 ml-3" id="liveToastBtn" @click="copyShortUrlToClipboard">Copy Link</button>
+          <button class="bg-blue-900 text-white rounded p-1 mt-2 col-start-3 col-end-7 ml-3 focus:ring" id="liveToastBtn" @click="copyShortUrlToClipboard">Copy Link</button>
         </div> 
       </div>
     </div>
@@ -96,7 +97,7 @@ const removeToast = (index) => {
      <!-- Toast --> 
      <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5" placement="bottom-end" v-if="isCopied">
     <CToast class="flex flex-col" v-for="(toast, index) in toasts">
-      <div class="flex justify-between">
+      <div class="flex justify-between">  
       <CToastHeader>
       <span class="me-auto fw-bold text-white inline">{{toast.title}}</span>
       </CToastHeader>
