@@ -80,16 +80,20 @@ const removeToast = (index) => {
           <input type="text" class="form-control" id="inputPassword2" placeholder="Long URL" v-model="longUrl" required @click="longUrl = ''">
         </div>
         <div class="col-auto">
-          <button type="submit" class="bg-indigo-600 text-white rounded p-2 mb-3 hover:bg-indigo-700 focus:ring" @click="clearAllToasts()">Shorten!</button>
+          <button type="submit" class="bg-indigo-600 text-white rounded p-2 mb-3 hover:bg-indigo-700 focus:ring" @click="clearAllToasts()">
+            Shorten!
+          </button>
         </div>
       </form>
 
        <!-- Box, where the shortened URl result appears --> 
       <div class="flex justify-center items-center" v-if="isSubmitted">
-        <div class="alert alert-primary" role="alert">
-          Short Url: 
-          <a v-bind="{ href: shortUrl, target: '_blank' }">{{ shortUrl }}</a>
-          <button class="bg-blue-900 text-white rounded p-1 mt-2 col-start-3 col-end-7 ml-3 focus:ring" id="liveToastBtn" @click="copyShortUrlToClipboard">Copy Link</button>
+        <div class="alert alert-primary grid grid-cols-3 grid-rows-3 overflow-hidden md:flex justify-center items-center" role="alert">
+          <span class="col-start-2 col-end-4 row-start-1">Short Url: </span>
+          <a class="col-start-1 col-end-4 row-start-2" v-bind="{ href: shortUrl, target: '_blank' }">{{ shortUrl }}</a>
+          <button class="col-start-1 col-end-4 row-start-3 bg-blue-900 text-white rounded p-1 mt-2 ml-3 focus:ring" id="liveToastBtn" @click="copyShortUrlToClipboard">
+            Copy Link
+          </button>
         </div> 
       </div>
     </div>
