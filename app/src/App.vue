@@ -1,6 +1,6 @@
 <script setup lang="ts"> 
 import { ref } from 'vue';
-import Toast from './components/Toast.vue'
+// import Toast from './components/Toast.vue'
 
 document.title = "URL Shortener"
 
@@ -41,8 +41,13 @@ const copyShortUrlToClipboard = () => {
   isCopied.value = true
 }
 
+// Toast interface
+interface Toast {
+  title: string;
+  content: string;
+}
 // Toasts array
-const toasts = ref([]);
+const toasts = ref<Toast[]>([]);
 
 // Deletes all toasts from array
 const clearAllToasts = () => {
@@ -62,7 +67,7 @@ const createToast = () => {
 }
 
 // Removes only one toast
-const removeToast = (index) => {
+const removeToast = (index: any) => {
       toasts.value.splice(index, 1);
       isCopied.value = false
     };
