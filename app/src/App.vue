@@ -60,15 +60,15 @@ const createToast = () => {
     content: 'Url copied to clipboard!'
   });
   // Deletes toast after 5 seconds
-  setTimeout(function(){
-    clearAllToasts();
-    isCopied.value = false
-  }, 5000);
+  // setTimeout(function(){
+  //   clearAllToasts();
+  //   isCopied.value = false
+  // }, 5000);
 }
 
-// Removes only one toast
-const removeToast = (index: any) => {
-      toasts.value.splice(index, 1);
+// Removes toasts
+const removeToast = () => {
+      toasts.value = []
       isCopied.value = false
     };
 </script>
@@ -82,7 +82,7 @@ const removeToast = (index: any) => {
       <!-- Form --> 
       <form class="row g-3 mt-1" @submit.prevent="onSubmit">
         <div class="col-auto">
-          <input type="text" class="form-control" id="inputPassword2" placeholder="Long URL" v-model="longUrl" required @click="longUrl = ''">
+          <input type="text" class="form-control" id="inputPassword2" placeholder="Long URL" v-model="longUrl" @click="longUrl = ''" required>
         </div>
         <div class="col-auto">
           <button type="submit" class="bg-indigo-600 text-white rounded p-2 mb-3 hover:bg-indigo-700 focus:ring" @click="clearAllToasts()">
@@ -104,13 +104,13 @@ const removeToast = (index: any) => {
     </div>
 
      <!-- Toast --> 
-     <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5" placement="bottom-end" v-if="isCopied">
-    <CToast class="flex flex-col" v-for="(toast, index) in toasts">
+     <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5 gap-4" placement="bottom-end" v-if="isCopied">
+    <CToast class="flex flex-col" v-for="(toast) in toasts">
       <div class="flex justify-between">  
       <CToastHeader>
       <span class="me-auto fw-bold text-white inline">{{toast.title}}</span>
       </CToastHeader>
-      <button type="button" class="btn btn-close bg-white" aria-label="Close" @click="removeToast(index)"></button>
+      <button type="button" class="btn btn-close bg-white" aria-label="Close" @click="removeToast()"></button>
     </div>
       <CToastBody class="me-auto text-white block">
         {{ toast.content }}
