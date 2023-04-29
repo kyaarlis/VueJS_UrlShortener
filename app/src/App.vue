@@ -49,28 +49,23 @@ interface Toast {
 // Toasts array
 const toasts = ref<Toast[]>([]);
 
-// Deletes all toasts from array
-const clearAllToasts = () => {
-  toasts.value = []
-}
-
 const createToast = () => {
   toasts.value.push({
     title: 'Success',
     content: 'Url copied to clipboard!'
   });
   // Deletes toast after 5 seconds
-  // setTimeout(function(){
-  //   clearAllToasts();
-  //   isCopied.value = false
-  // }, 5000);
+  setTimeout(function(){
+    clearAllToasts();
+    isCopied.value = false
+  }, 5000);
 }
 
-// Removes toasts
-const removeToast = () => {
-      toasts.value = []
-      isCopied.value = false
-    };
+// Deletes all toasts from array
+const clearAllToasts = () => {
+  toasts.value = []
+  isCopied.value = false
+}
 </script>
 
 
@@ -104,15 +99,15 @@ const removeToast = () => {
     </div>
 
      <!-- Toast --> 
-     <CToaster class="flex justify-between border-2 p-1 rounded fixed bottom-6 right-5 gap-4" placement="bottom-end" v-if="isCopied">
-    <CToast class="flex flex-col" v-for="(toast) in toasts">
+     <CToaster class="flex justify-between fixed bottom-6 right-5 gap-4" placement="bottom-end" v-if="isCopied">
+    <CToast class="flex flex-col border-2 p-2 rounded" v-for="(toast) in toasts">
       <div class="flex justify-between">  
       <CToastHeader>
-      <span class="me-auto fw-bold text-white inline">{{toast.title}}</span>
+      <span class="me-auto fw-bold text-white">{{toast.title}}</span>
       </CToastHeader>
-      <button type="button" class="btn btn-close bg-white" aria-label="Close" @click="removeToast()"></button>
+      <button type="button" class="btn btn-close bg-white" aria-label="Close" @click="clearAllToasts()"></button>
     </div>
-      <CToastBody class="me-auto text-white block">
+      <CToastBody class="me-auto text-white">
         {{ toast.content }}
       </CToastBody>  
     </CToast>
