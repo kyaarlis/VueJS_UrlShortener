@@ -13,3 +13,19 @@
     </CToast>
   </CToaster>
  </template>
+
+ <script lang="ts">
+ // Toast interface
+  interface Toast {
+    title: string;
+    content: string;
+  }
+
+  export default {
+     data() {
+      return {
+        
+      }
+     }
+  }
+</script>

@@ -1,71 +1,96 @@
-<script setup lang="ts"> 
-import { ref } from 'vue';
-// import Toast from './components/Toast.vue'
+<script lang="ts"> 
+// import { ref } from 'vue';
+import Toast from './components/Toast.vue'
 
 document.title = "URL Shortener"
 
-const longUrl = ref('')
-const shortUrl = ref('')
-// Keeps track wether the URL submit button is clicked or not
-const isSubmitted = ref(false)
-const isCopied = ref(false)
+ // Toast interface
+ interface Toast {
+    title: string;
+    content: string;
+  }
 
-// Sends the url to backend for modifications and to store in DB
-const onSubmit = () => {
-  isSubmitted.value = true
-
-  fetch('http://localhost:3333/api/short', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
+export default {
+  data() {
+    return {
+      longUrl: '',
+      shortUrl: '',
+      // Keeps track wether the URL submit button is clicked or not
+      isSubmitted: false,
+      isCopied: false,
+      toasts: <Toast[]>[]
+    }
   },
-  body: JSON.stringify({
-    "origUrl": longUrl.value
-})
-})
-.then(response => response.json())
-.then(data => shortUrl.value = data.shortUrl)
-.catch(error => console.error(error));
+  methods: {
+    onSubmit() {
+      // Sends the url to backend for modifications and to store in DB
+      this.isSubmitted = true
+
+      fetch('http://localhost:3333/api/short', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          "origUrl": this.longUrl
+      })
+      })
+      .then(response => response.json())
+      .then(data => this.shortUrl = data.shortUrl)
+      .catch(error => console.error(error));
+    },
+    copyShortUrlToClipboard() {
+    // Copies the shortened URL to clipboard
+    const el = document.createElement('textarea')
+    el.value = this.shortUrl
+    document.body.appendChild(el)
+    el.select()
+    document.execCommand('copy')
+    document.body.removeChild(el)
+    // If link is copied then create toast
+    this.createToast()
+    this.isCopied = true
+    },
+    createToast() {
+      this.toasts.push({
+      title: 'Success',
+      content: 'Url copied to clipboard!'
+    });
+    // Deletes toast after 5 seconds
+    setTimeout(() => {
+      this.clearAllToasts();
+      this.isCopied = false
+    }, 5000);
+    },
+    clearAllToasts() {
+      this.toasts = []
+      this.isCopied = false
+    }
+
+  }
 }
 
-// Copies the shortened URL to clipboard
-const copyShortUrlToClipboard = () => {
-  const el = document.createElement('textarea')
-  el.value = shortUrl.value
-  document.body.appendChild(el)
-  el.select()
-  document.execCommand('copy')
-  document.body.removeChild(el)
-  // If link is copied then create toast
-  createToast()
-  isCopied.value = true
-}
+// // Toasts array
+// const toasts = ref<Toast[]>([]);
 
-// Toast interface
-interface Toast {
-  title: string;
-  content: string;
-}
-// Toasts array
-const toasts = ref<Toast[]>([]);
+// const createToast = () => {
+//   toasts.value.push({
+//     title: 'Success',
+//     content: 'Url copied to clipboard!'
+//   });
+//   // Deletes toast after 5 seconds
+//   setTimeout(function(){
+//     clearAllToasts();
+//     isCopied.value = false
+//   }, 5000);
+// }
 
-const createToast = () => {
-  toasts.value.push({
-    title: 'Success',
-    content: 'Url copied to clipboard!'
-  });
-  // Deletes toast after 5 seconds
-  setTimeout(function(){
-    clearAllToasts();
-    isCopied.value = false
-  }, 5000);
-}
+// // Deletes all toasts from array
+// const clearAllToasts = () => {
+//   toasts.value = []
+//   isCopied.value = false
+// }
 
-// Deletes all toasts from array
-const clearAllToasts = () => {
-  toasts.value = []
-  isCopied.value = false
-}
 </script>
 
 
@@ -99,19 +124,7 @@ const clearAllToasts = () => {
     </div>
 
      <!-- Toast --> 
-     <CToaster class="flex justify-between fixed bottom-6 right-5 gap-4" placement="bottom-end" v-if="isCopied">
-    <CToast class="flex flex-col border-2 p-2 rounded" v-for="(toast) in toasts">
-      <div class="flex justify-between">  
-      <CToastHeader>
-      <span class="me-auto fw-bold text-white">{{toast.title}}</span>
-      </CToastHeader>
-      <button type="button" class="btn btn-close bg-white" aria-label="Close" @click="clearAllToasts()"></button>
-    </div>
-      <CToastBody class="me-auto text-white">
-        {{ toast.content }}
-      </CToastBody>  
-    </CToast>
-  </CToaster>
+     <Toast />
     
   </div>
 </template>
