@@ -40,33 +40,33 @@ export default {
       .catch(error => console.error(error));
     },
     copyShortUrlToClipboard() {
-    // Copies the shortened URL to clipboard
-    const el = document.createElement('textarea')
-    el.value = this.shortUrl
-    document.body.appendChild(el)
-    el.select()
-    document.execCommand('copy')
-    document.body.removeChild(el)
-    // If link is copied then create toast
-    this.createToast()
-    this.isCopied = true
-    },
-    createToast() {
-      this.toasts.push({
-      title: 'Success',
-      content: 'Url copied to clipboard!'
-    });
-    // Deletes toast after 5 seconds
-    setTimeout(() => {
-      this.clearAllToasts();
-      this.isCopied = false
-    }, 5000);
+      // Copies the shortened URL to clipboard
+      const el = document.createElement('textarea')
+      el.value = this.shortUrl
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+      
+      // If link is copied then create toast
+      this.createToast()
+      this.isCopied = true
+      },
+      createToast() {
+        this.toasts.push({
+        title: 'Success',
+        content: 'Url copied to clipboard!'
+      });
+      // Deletes toast after 5 seconds
+      setTimeout(() => {
+        this.clearAllToasts();
+        this.isCopied = false
+      }, 5000);
     },
     clearAllToasts() {
       this.toasts = []
       this.isCopied = false
     }
-
   }
 }
 
@@ -124,7 +124,26 @@ export default {
     </div>
 
      <!-- Toast --> 
-     <Toast />
+     <Toast 
+     v-if="isCopied"
+     v-for="(toast) in toasts"
+     :title="toast.title"
+     :content="toast.content"
+     @clearToasts="clearAllToasts"
+     />
+     <!-- <CToaster class="flex justify-between fixed bottom-6 right-5 gap-4" placement="bottom-end" v-if="isCopied">
+    <CToast class="flex flex-col border-2 p-2 rounded" v-for="(toast) in toasts">
+      <div class="flex justify-between">  
+      <CToastHeader>
+      <span class="me-auto fw-bold text-white">{{toast.title}}</span>
+      </CToastHeader>
+      <button type="button" class="btn btn-close bg-white" aria-label="Close" @click="clearAllToasts()"></button>
+    </div>
+      <CToastBody class="me-auto text-white">
+        {{ toast.content }}
+      </CToastBody>  
+    </CToast>
+  </CToaster> -->
     
   </div>
 </template>
